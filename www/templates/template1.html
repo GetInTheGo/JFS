@@ -1,0 +1,38 @@
+
+<ion-view hide-nav-bar="true" title="Users">
+    <ion-content>
+        <ul class="list">
+            <div ng-repeat="recruit in usersLiscenced">
+                <li class="item" ng-class="{active: recruit.show==true}" ng-init="recruit.show=false" ng-click="recruit.show=!recruit.show"  style="vertical-align: middle;line-height:30px">
+					{{recruit.fname +' ' +recruit.lname}}
+      
+                    <div style="width:30px;height:30px;float:right" >
+                        <canvas id="doughnut" class="chart chart-doughnut" chart-data="[10,10,10,10]" chart-legend="false" chart-colours="['#97BBCD', '#DCDCDC', '#F7464A', '#FDB45C']" chart-labels="['','','','']"
+							 width="10px" height="10px"></canvas>
+                    </div>
+                </li>
+                <li class="item item-accordion"
+                    ng-show="recruit.show==true">
+                    <div class="card">
+                        <div class="item item-text-wrap">
+                            <div class="row">
+                                <div class="col"><span class="card-header">Email:</span></div>
+                                <div class="col">{{recruit.Email}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><span class="card-header">Phone:</span></div>
+                                <div class="col">{{recruit.phone}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><span class="card-header">Next Step:</span></div>
+                                <div class="col">{{recruit.NextStep}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </item>
+            </div>
+        </ul>
+    </ion-content>
+</ion-view>
+
+
