@@ -47,6 +47,7 @@ app.config(function (localStorageServiceProvider,$stateProvider, $urlRouterProvi
   
 app.controller('main', function ($scope, $ionicModal, localStorageService,$http) {
     //store the entities name in a variable
+    $scope.updateRecruits= function(){
     $http.get('http://johnsonfinancialservice.com/Test/getProspectsLiscenced.php').success(function(data) {
 
 		$scope.usersLiscenced = data;
@@ -54,8 +55,13 @@ app.controller('main', function ($scope, $ionicModal, localStorageService,$http)
 		$scope.MaxIDLiscenced = Math.max.apply(Math, data.map(function(o) {
 			return o.ID;
 		}));
+		$scope.$broadcast('scroll.refreshComplete');
 	});
-
+};
+$scope.dialNumber = function(number) {
+  window.open('tel:' + number, '_system');
+}
+$scope.updateRecruits();
     var taskData = 'task';
 
     //initialize the tasks scope with empty array

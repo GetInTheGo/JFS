@@ -1,6 +1,9 @@
 
 <ion-view hide-nav-bar="true" title="Users">
     <ion-content>
+    <ion-refresher on-refresh="updateRecruits()">
+                     
+      </ion-refresher>
         <ul class="list">
             <div ng-repeat="recruit in usersLiscenced">
                 <li class="item" ng-class="{active: recruit.show==true}" ng-init="recruit.show=false" ng-click="recruit.show=!recruit.show"  style="vertical-align: middle;line-height:30px">
@@ -21,7 +24,7 @@
                             </div>
                             <div class="row">
                                 <div class="col"><span class="card-header">Phone:</span></div>
-                                <div class="col">{{recruit.phone}}</div>
+                                <div  ng-click="dialNumber('8012982918')" class="col">{{recruit.phone}}</div>
                             </div>
                             <div class="row">
                                 <div class="col"><span class="card-header">Next Step:</span></div>
