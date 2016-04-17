@@ -22,6 +22,7 @@
 
 
     <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
@@ -30,13 +31,7 @@
 <body ng-app="ionic-todo" ng-controller="main" ng-init="getTasks()">
 
 <ion-pane>
-    <ion-header-bar class="bar-dark">
-             <img style="height:27px;margin-top:20px" src="img/icons/logosimp.png">
-        <!-- New Task button-->
-        <button style="position:fixed;right:0px" class="button button-icon" ng-click="openTaskModal()">
-            <i class="icon ion-compose"></i>
-        </button></ion-nav-title>
-    </ion-header-bar>
+    
     
     <ion-nav-view animation="slide-left-right"></ion-nav-view>
             </ion-pane>

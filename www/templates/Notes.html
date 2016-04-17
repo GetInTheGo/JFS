@@ -1,0 +1,29 @@
+<ion-view >
+    <ion-header-bar class="bar-dark">
+        <div class="col">
+            <button  class="button button-icon" ui-sref="RecruitList">
+                <i class="icon ion-arrow-left-a"></i>
+            </button>
+        </div>
+        <div class="col" style="text-align: center">
+            <img style="height:27px" src="img/icons/logosimp.png"/>
+        </div>
+        <!-- New Task button-->
+        <div class="col" style="text-align: right">
+            <button class="button button-icon" ng-click="openTaskModal()">
+                <i class="icon ion-compose"></i>
+            </button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div ng-repeat="note in notes" class="card">
+            <div class="item item-text-wrap">
+            {{note.text}}
+            </div>
+            <div class="item item-divider" style="font-size:10px">
+                <span style="font-size:10px!important">{{note.datetime| date : 'MMM d yyyy @ h:mm a'}}</span>
+                <span style="float:right">{{note.userName}}</span>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

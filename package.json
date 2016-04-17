@@ -21,7 +21,12 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "cordova-plugin-inappbrowser"
+    "cordova-plugin-inappbrowser",
+    {
+      "locator": "https://github.com/jcjee/email-composer.git",
+      "id": "com.jcjee.plugins.emailcomposer"
+    },
+    "cordova-plugin-email-composer@0.8.3"
   ],
   "cordovaPlatforms": [
     "android",

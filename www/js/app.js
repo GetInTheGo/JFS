@@ -2,10 +2,11 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('ionic-todo', ['ionic', 'LocalStorageModule', 'chart.js'])
+var app = angular.module('ionic-todo', ['ionic', 'LocalStorageModule', 'chart.js', 'ngCordova'])
 
 app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
+
         if (window.cordova && window.cordova.plugins.Keyboard) {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
@@ -17,7 +18,11 @@ app.run(function($ionicPlatform) {
             cordova.plugins.Keyboard.disableScroll(true);
         }
         if (window.StatusBar) {
-            StatusBar.styleDefault();
+            //StatusBar.styleDefault();
+            StatusBar.overlaysWebView(true);
+            StatusBar.style(1); //Light
+            //StatusBar.style(2); //Black, transulcent
+            //StatusBar.style(3); //Black, opaque       
         }
     });
 });
@@ -26,26 +31,36 @@ app.config(function(localStorageServiceProvider, $stateProvider, $urlRouterProvi
     localStorageServiceProvider
         .setPrefix('ionic-todo');
     $stateProvider
-        .state('login', {
-            url: '/login',
-            templateUrl: 'templates/t2.html',
+        .state('Login', {
+            url: '/Login',
+            templateUrl: 'templates/Login.html',
             controller: 'main'
         })
-        .state('users', {
-            url: '/users',
-            templateUrl: 'templates/template1.html',
+        .state('RecruitList', {
+            url: '/RecruitList',
+            templateUrl: 'templates/RecruitList.html',
             controller: 'main'
         })
         .state('user', {
             url: "/users/:userId",
             templateUrl: "templates/user.html",
             controller: "main"
+        })
+        .state('Notes', {
+            url: "/Notes",
+            templateUrl: "templates/Notes.html",
+            controller: "main"
         });
-    $urlRouterProvider.otherwise('/users');
+
+
+    $urlRouterProvider.otherwise('/Login');
 });
 
-app.controller('main', function($scope, $ionicModal, localStorageService, $http) {
+app.controller('main', function($scope, $ionicModal, localStorageService, $http, $ionicScrollDelegate) {
     //store the entities name in a variable
+    $scope.resizeScroll = function() {
+        $ionicScrollDelegate.resize()
+    }
     $scope.updateRecruits = function() {
         $http.get('http://johnsonfinancialservice.com/Test/getProspectsLiscenced.php').success(function(data) {
 
@@ -58,19 +73,42 @@ app.controller('main', function($scope, $ionicModal, localStorageService, $http)
         });
     };
     $scope.dialNumber = function(number) {
+        //console.log(number);
+        number = number.replace(/[^0-9a-z]/gi, '');
+        console.log(number);
         window.open('tel:' + number, '_system');
     }
+    $scope.sendEmail = function(email) {
+        //if(window.plugins && window.plugins.email) {console.log('yes');}
+
+        //console.log(number);
+        //number =number.replace(/[^0-9a-z]/gi, '');
+        //console.log(number);
+        window.open('mailto:' + email, '_system');
+    }
+
     $scope.updateRecruits();
     var taskData = 'task';
-
-    //initialize the tasks scope with empty array
+    $scope.toggleItem = function(recruit) {
+        if (recruit.shown) {
+            recruit.shown = false;
+        } else {
+            recruit.shown = true;
+        }
+        $ionicScrollDelegate.resize();
+    };
+    $scope.isItemShown = function(recruit) {
+            $ionicScrollDelegate.resize();
+            return recruit.shown;
+        }
+        //initialize the tasks scope with empty array
     $scope.tasks = [];
 
     //initialize the task scope with empty object
     $scope.task = [];
 
     //configure the ionic modal before use
-    $ionicModal.fromTemplateUrl('new-task-modal.html', {
+    $ionicModal.fromTemplateUrl('modals/new-task-modal.html', {
         scope: $scope,
         animation: 'slide-in-up'
     }).then(function(modal) {
@@ -112,7 +150,63 @@ app.controller('main', function($scope, $ionicModal, localStorageService, $http)
         localStorageService.set(taskData, $scope.tasks);
 
     };
-
+    $scope.notes = [{
+        "userid": 3,
+        "userName": "Scott Johnson",
+        "userPhoto": "Scottdisplay.png",
+        "applicantid": 1,
+        "parentid": 0,
+        "text": "Cody, This is amazing you're clearly my favorite and most talented child",
+        "datetime": "2016-04-10T23:26:37.861Z"
+    }, {
+        "userid": 2,
+        "userName": "Sherry Johnson",
+        "userPhoto": "SherryDisplay.png",
+        "applicantid": 1,
+        "parentid": 0,
+        "text": "I agree he's always been my favorite",
+        "datetime": "2016-04-10T23:42:16.724Z"
+    }, {
+        "userid": 1,
+        "userName": "Cody Johnson",
+        "userPhoto": "CodyDisplay.png",
+        "applicantid": 1,
+        "parentid": 0,
+        "text": "Ah Shucks",
+        "datetime": "2016-04-11T06:12:03.047Z"
+    }, {
+        "userid": 5,
+        "userName": "Dave Moultrie",
+        "userPhoto": "DaveDisplay.png",
+        "applicantid": 1,
+        "parentid": 0,
+        "text": "Notes",
+        "datetime": "2016-04-12T00:30:03.735Z"
+    }, {
+        "userid": 5,
+        "userName": "Dave Moultrie",
+        "userPhoto": "DaveDisplay.png",
+        "applicantid": 1,
+        "parentid": 0,
+        "text": "Test",
+        "datetime": "2016-04-12T01:03:16.061Z"
+    }, {
+        "userid": 1,
+        "userName": "Cody Johnson",
+        "userPhoto": "CodyDisplay.png",
+        "applicantid": 1,
+        "parentid": 0,
+        "text": "Did I Break it Yet",
+        "datetime": "2016-04-14T18:38:36.325Z"
+    }, {
+        "userid": 1,
+        "userName": "Cody Johnson",
+        "userPhoto": "CodyDisplay.png",
+        "applicantid": 1,
+        "parentid": 0,
+        "text": "Nope",
+        "datetime": "2016-04-14T18:38:50.156Z"
+    }]
     $scope.openTaskModal = function() {
         $scope.newTaskModal.show();
     };

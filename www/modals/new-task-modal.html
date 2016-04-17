@@ -1,6 +1,6 @@
 <ion-modal-view>
             <ion-header-bar class="bar-dark">
-                <h1 class="title">Create a new Task</h1>
+                <h1 class="title">Create a new Note</h1>
                 <button class="button button-icon" ng-click="closeTaskModal()">
                     <i class="icon ion-android-close"></i>
                 </button>
@@ -9,10 +9,7 @@
                 <form ng-submit="createTask()">
                     <div class="list list-inset">
                         <label class="item item-input">
-                            <input ng-model="task.title" type="text" placeholder="Task title">
-                        </label>
-                        <label class="item item-input">
-                            <textarea ng-model="task.content" rows="5" placeholder="Task content"></textarea>
+                            <textarea ng-model="task.content" rows="10" placeholder="Task content"></textarea>
                         </label>
                         <ul class="list">
                             <li class="item item-toggle">
@@ -25,7 +22,7 @@
                                 </label>
                             </li>
                         </ul>
-                        <button type="submit" class="button button-block button-positive">Create Task</button>
+                        <button type="submit" class="button button-block button-positive">Add Note</button>
                     </div>
                 </form>
             </ion-content>
