@@ -1,5 +1,5 @@
-<ion-modal-view>
-            <ion-header-bar class="bar-dark">
+<ion-modal-view style="background: #3F4651;background: rgba(62,70,81,0.60);background-image: linear-gradient(-180deg, rgba(192,192,192,0.5) 66%, rgba(0,0,0,0.5) 100%);!important;">
+            <ion-header-bar class="shadow_1" style="background:rgba(215,228,236,.95)!important;">
                 <h1 class="title">Create a new Note</h1>
                 <button class="button button-icon" ng-click="closeTaskModal()">
                     <i class="icon ion-android-close"></i>
@@ -11,19 +11,9 @@
                         <label class="item item-input">
                             <textarea ng-model="task.content" rows="10" placeholder="Task content"></textarea>
                         </label>
-                        <ul class="list">
-                            <li class="item item-toggle">
-                                Completed?
-                                <label class="toggle toggle-balanced">
-                                    <input type="checkbox" ng-model="task.completed">
-                                   <div class="track">
-                                        <div class="handle"></div>
-                                    </div>
-                                </label>
-                            </li>
-                        </ul>
-                        <button type="submit" class="button button-block button-positive">Add Note</button>
+                      <button style="margin:0px;border:none;border-radius: 0" type="submit" class="button button-block button-positive">Add Note</button>
                     </div>
                 </form>
             </ion-content>
         </ion-modal-view>
+

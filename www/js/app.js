@@ -39,7 +39,7 @@ app.config(function(localStorageServiceProvider, $stateProvider, $urlRouterProvi
         .state('RecruitList', {
             url: '/RecruitList',
             templateUrl: 'templates/RecruitList.html',
-            controller: 'main'
+            controller: 'RecruitsCtrl'
         })
         .state('user', {
             url: "/users/:userId",
@@ -55,13 +55,75 @@ app.config(function(localStorageServiceProvider, $stateProvider, $urlRouterProvi
 
     $urlRouterProvider.otherwise('/Login');
 });
+app.factory('currentUser', function($http, $q,$state,$ionicLoading) {
+	var currentUser={};
+	var loggedin;
+	var UserInfo = {access_token:''};
+	currentUser.login = function(UserName,Password) {
+		 $ionicLoading.show({
+      template: "Authenticating<ion-spinner icon='lines' class='spinner-energized'></ion-spinner></div>"
+    });
 
-app.controller('main', function($scope, $ionicModal, localStorageService, $http, $ionicScrollDelegate) {
+		var deferred = $q.defer();
+		$http({
+			method: 'POST',
+			url: 'http://johnsonfinancialservice.com/Secure/OAUTH/getToken/',
+			data: {grant_type:'password',client_id:'testclient',client_secret:'testpass',username:UserName,password:Password}
+		}).success(function(data, status, headers, config) {
+			// Store your data or what ever.... 
+			// Then resolve
+			UserInfo.access_token = data.access_token;
+			console.log(UserInfo);
+			deferred.resolve(data);
+			$ionicLoading.hide();
+			$state.go('RecruitList');
+		}).error(function(data, status, headers, config) {
+			console.log("Error: request returned status " + status);
+			$ionicLoading.hide();
+			deferred.reject("Error: request returned status " + status);
+		});
+		return deferred.promise;
+     }	
+     currentUser.getToken = function(){
+	     return UserInfo.access_token;
+     }
+	currentUser.getCurrent = function() {
+		var deferred = $q.defer();
+		$http.get('/phpscripts/getSessionData.php').success(function(data) {
+			// Store your data or what ever.... 
+			// Then resolve
+			deferred.resolve(data);
+		}).error(function(data, status, headers, config) {
+			deferred.reject("Error: request returned status " + status);
+		});
+		loggedin = deferred.promise;
+		return deferred.promise;
+	};
+		return currentUser;
+});
+app.controller('main', function($scope, $ionicModal, localStorageService, $http, $ionicScrollDelegate,currentUser,$ionicLoading) {
     //store the entities name in a variable
     $scope.resizeScroll = function() {
         $ionicScrollDelegate.resize()
     }
+    $scope.currentUser = currentUser;
+    $scope.test =function(UserName,Password){
+	    $http({
+			method: 'POST',
+			url: 'http://johnsonfinancialservice.com/Secure/API/getToken/',
+			data: {client_id:'testclient',client_secret:'testpass',username:UserName,password:Password}
+		}).success(function(data) {
+			// Store your data or what ever.... 
+			// Then resolve
+			deferred.resolve(data);
+		}).error(function(data, status, headers, config) {
+			deferred.reject("Error: request returned status " + status);
+		});
+
+    }
+    //currentUser.login('Cody','skiutah4969')
     $scope.updateRecruits = function() {
+
         $http.get('http://johnsonfinancialservice.com/Test/getProspectsLiscenced.php').success(function(data) {
 
             $scope.usersLiscenced = data;
@@ -150,64 +212,7 @@ app.controller('main', function($scope, $ionicModal, localStorageService, $http,
         localStorageService.set(taskData, $scope.tasks);
 
     };
-    $scope.notes = [{
-        "userid": 3,
-        "userName": "Scott Johnson",
-        "userPhoto": "Scottdisplay.png",
-        "applicantid": 1,
-        "parentid": 0,
-        "text": "Cody, This is amazing you're clearly my favorite and most talented child",
-        "datetime": "2016-04-10T23:26:37.861Z"
-    }, {
-        "userid": 2,
-        "userName": "Sherry Johnson",
-        "userPhoto": "SherryDisplay.png",
-        "applicantid": 1,
-        "parentid": 0,
-        "text": "I agree he's always been my favorite",
-        "datetime": "2016-04-10T23:42:16.724Z"
-    }, {
-        "userid": 1,
-        "userName": "Cody Johnson",
-        "userPhoto": "CodyDisplay.png",
-        "applicantid": 1,
-        "parentid": 0,
-        "text": "Ah Shucks",
-        "datetime": "2016-04-11T06:12:03.047Z"
-    }, {
-        "userid": 5,
-        "userName": "Dave Moultrie",
-        "userPhoto": "DaveDisplay.png",
-        "applicantid": 1,
-        "parentid": 0,
-        "text": "Notes",
-        "datetime": "2016-04-12T00:30:03.735Z"
-    }, {
-        "userid": 5,
-        "userName": "Dave Moultrie",
-        "userPhoto": "DaveDisplay.png",
-        "applicantid": 1,
-        "parentid": 0,
-        "text": "Test",
-        "datetime": "2016-04-12T01:03:16.061Z"
-    }, {
-        "userid": 1,
-        "userName": "Cody Johnson",
-        "userPhoto": "CodyDisplay.png",
-        "applicantid": 1,
-        "parentid": 0,
-        "text": "Did I Break it Yet",
-        "datetime": "2016-04-14T18:38:36.325Z"
-    }, {
-        "userid": 1,
-        "userName": "Cody Johnson",
-        "userPhoto": "CodyDisplay.png",
-        "applicantid": 1,
-        "parentid": 0,
-        "text": "Nope",
-        "datetime": "2016-04-14T18:38:50.156Z"
-    }]
-    $scope.openTaskModal = function() {
+        $scope.openTaskModal = function() {
         $scope.newTaskModal.show();
     };
 
@@ -215,3 +220,99 @@ app.controller('main', function($scope, $ionicModal, localStorageService, $http,
         $scope.newTaskModal.hide();
     };
 });
+app.controller('RecruitsCtrl', function($ionicActionSheet,$scope, $ionicModal, localStorageService, $http, $ionicScrollDelegate,currentUser,$ionicLoading) {
+	$scope.usersLiscenced=[];
+	$scope.currentRecruit ={};
+	$scope.updateRecruits = function(){ 
+		$scope.show = function() {
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
+  };
+  	$http({
+			method: 'GET',
+			params:{access_token:currentUser.getToken(),client_id:'testclient',client_secret:'testpass'},
+			url: 'http://johnsonfinancialservice.com/Secure/API/Recruits/',
+
+		}).then(function(data){ $scope.usersLiscenced = data.data;
+			$scope.$broadcast('scroll.refreshComplete');
+		})};
+	$scope.updateRecruits();
+	$ionicModal.fromTemplateUrl('modals/Notes-Modal.html', {
+        id: '1',
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.newNoteModal = modal;
+    });
+    $ionicModal.fromTemplateUrl('modals/ToDo-Modal.html', {
+        id: '2',
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.newToDoModal = modal;
+    });
+    $scope.openNoteModal = function(Recruit) {
+	    $ionicLoading.show({template: "<ion-spinner icon='lines' class='spinner-energized'></ion-spinner>"});
+
+	    
+	    $http({
+			method: 'GET',
+			params:{access_token:currentUser.getToken(),client_id:'testclient',client_secret:'testpass'},
+			url: 'http://johnsonfinancialservice.com/Secure/API/Recruits/'+Recruit.INDV_ID+'/',
+
+		}).then(function(data){ $scope.RecruitInfo = data.data;$scope.newNoteModal.show();
+			$scope.currentRecruit =Recruit;
+			$ionicLoading.hide();
+		})};
+	 $scope.openToDoModal = function(Recruit) {
+	    $ionicLoading.show({
+      template: "<ion-spinner icon='lines' class='spinner-energized'></ion-spinner>"
+    	});
+
+	    
+	    $http({
+			method: 'GET',
+			params:{access_token:currentUser.getToken(),client_id:'testclient',client_secret:'testpass'},
+			url: 'http://johnsonfinancialservice.com/Secure/API/Recruits/'+Recruit.INDV_ID+'/',
+
+		}).then(function(data){ $scope.RecruitInfo = data.data;$scope.newToDoModal.show();
+			$scope.currentRecruit =Recruit;
+			$ionicLoading.hide();
+		})};
+	$scope.moveItem = function(item, fromIndex, toIndex) {
+    //Move the item in the array
+    $scope.items.splice(fromIndex, 1);
+    $scope.items.splice(toIndex, 0, item);
+  };
+	$scope.closeNoteModal = function() {
+        $scope.newNoteModal.hide();
+    };
+    $scope.closeToDoModal = function() {
+        $scope.newToDoModal.hide();
+    };
+    $scope.RecruitActionSheet = function(recruit) {
+		   // Show the action sheet
+		   var hideSheet = $ionicActionSheet.show({
+		   buttons: 
+		   [
+		   	{ text: 'Share Contact Info' },
+		   	{ text: 'View Profile' },
+		   	{ text: 'View Notes' },
+		   	{ text: 'View ToDo' }
+		   ],
+     destructiveText: 'Delete',
+     titleText: 'Modify your album',
+     cancelText: 'Cancel',
+     cancel: function() {},
+     buttonClicked: function(index) {if(index==3){$scope.openToDoModal(recruit);hideSheet();}
+     								if(index==2){$scope.openNoteModal(recruit);hideSheet();}	
+     									}
+   });
+   }
+
+
+
+
+
+ });
