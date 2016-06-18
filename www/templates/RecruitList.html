@@ -2,7 +2,7 @@
 <ion-view hide-nav-bar="false" class="background2">
     <ion-header-bar class="shadow_1" style="background:rgba(215,228,236,.95)!important;">
         <div class="col">
-            <img style="height:27px" src="img/icons/logosimp.png"/>
+            <img ui-sref="Home" style="height:27px" src="img/icons/logosimp.png"/>
         </div>
         <!-- New Task button-->
            </ion-header-bar>
@@ -15,6 +15,7 @@
             <div ng-repeat="recruit in usersLiscenced|filter:search" style="background:rgba(255,255,255,.2)!important;">
 	            
                 <ion-item   class="item background_2" ng-class="{active: isItemShown(recruit)}"  ng-click="toggleItem(recruit)"  style="vertical-align: middle;background:rgba(255,255,255,.2)!important;">
+					
 					<div class="row row-center">
 					<div class="col">
 					{{recruit.FNAME +' ' +recruit.LNAME}}
@@ -25,14 +26,10 @@
 							 chart-labels="['','','','']" width="10px" height="10px"></canvas>
                     </div>
 					</div>
-					<div class="col" style="text-align: right">
-                      <button class="button button-icon" ng-click="openNoteModal(recruit);$event.stopPropagation();" style="text-align: right;float:right">
-					  		<i class="icon ion-compose"></i>
-					  	</button>      
-					</div>
+					
 					
 					</div>
-					 <ion-option-button ng-click="RecruitActionSheet()" class="button-stable icon-top ion-more" style="background-color:#C7C7CC;font-size:30px;color:white"></ion-option-button>
+					 <ion-option-button ng-click="RecruitActionSheet(recruit)" class="button-stable icon-top ion-more" style="background-color:#C7C7CC;font-size:30px;color:white"></ion-option-button>
                         <ion-option-button class="button-energized icon-top ion-edit" style="background-color:#3E70A7;font-size:30px;color:white"></ion-option-button>
                         <ion-option-button class="button-assertive icon-top ion-trash-a" style="background-color:#FE3F35;font-size:30px;color:white"></ion-option-button>
                 </ion-item>
@@ -49,13 +46,13 @@
                                     <span>{{recruit.EMAIL}}</span>
                                 </div>
                                 <div class="item item-button-left">
-                                    <button  ng-click="dialNumber(recruit.PHONE)" class="button button-positive">
+                                    <button  ng-click="dialNumber(recruit.BUS_PH_NBR)" class="button button-positive">
                                         <i class="icon ion-ios-telephone"></i>
                                     </button>
                                     <span>{{recruit.BUS_PH_NBR}}</span>
                                 </div>
                                 <div class="item item-button-left">
-                                    <button  ng-click="dialNumber(recruit.phone)" class="button button-positive">
+                                    <button  class="button button-positive">
                                         <i class="icon ion-ios-checkmark-outline"></i>
                                     </button>
                                     <span>{{recruit.NextStep}}</span>

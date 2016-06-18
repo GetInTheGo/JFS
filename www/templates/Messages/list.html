@@ -1,0 +1,40 @@
+<ion-header-bar class="shadow_1" style="background:rgba(215,228,236,.95)!important;">
+
+  <div class="col" style="text-align: left">
+    <img ui-sref="Home" style="height:27px" src="img/icons/logosimp.png" />
+  </div>
+  <!-- New Task button-->
+  <!-- New Task button-->
+  <div class="col" style="text-align: center">
+    Messages
+  </div>
+  <div class="col" style="text-align: right">
+    <button ng-init="sideMenu=false" class="button button-icon" ng-click="sideMenu=!sideMenu">
+      <i class="icon ion-android-more-horizontal"></i>
+    </button>
+  </div>
+
+</ion-header-bar>
+<ion-content style="background:background:rgba(0,0,0,0)">
+  <ion-refresher on-refresh="updateTexts()"></ion-refresher>
+  <ion-list class="list" show-delete="false" can-swipe="true" style="background:rgba(0,0,0,0)!important;">
+    <li class="item padding" style="background-color:#CCCCCC;border:none">
+      <input type="text" class="form-control" placeholder="Search..." ng-model="search" style="height:35px;padding:10px 10px 10px 20px;border-radius: 20px;width:100%;" />
+    </li>
+    <div ng-repeat="text in Text_Summary|filter:search" style="background:rgba(255,255,255,.2)!important;">
+     
+      <ion-item class="item background_2 item-avatar" style="vertical-align: middle;background:rgba(255,255,255,.2)!important;">
+
+         
+        <img ng-src="https://jfsapp.com/Images/Recruits/{{text.ProfilePic || 'blank.jpg'}}">
+        <h2>{{text.RecruitName}}</h2>
+        <p>{{text.message|truncate:40}}...</p>
+        <ion-option-button ng-click="RecruitActionSheet(recruit)" class="button-stable icon-top ion-more" style="background-color:#C7C7CC;font-size:30px;color:white;display:block"></ion-option-button>
+        <ion-option-button class="button-energized icon-top ion-edit" style="background-color:#3E70A7;font-size:30px;color:white"></ion-option-button>
+        <ion-option-button class="button-assertive icon-top ion-trash-a" style="background-color:#FE3F35;font-size:30px;color:white"></ion-option-button>
+
+      </ion-item>
+      <div style="height:100%;width:10px;background-color:red;display:inline-block;position:absolute"></div>
+          </div>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,22 @@
+<ion-view style="overflow:scroll!important">
+    <ion-header-bar class="bar-dark">
+        <div class="col">
+            <button  class="button button-icon" ui-sref="RecruitList">
+                <i class="icon ion-arrow-left-a"></i>
+            </button>
+        </div>
+        <div class="col" style="text-align: center">
+            <img style="height:27px" src="img/icons/logosimp.png"/>
+        </div>
+        <!-- New Task button-->
+        <div class="col" style="text-align: right">
+            <button class="button button-icon" ng-click="openTaskModal()">
+                <i class="icon ion-compose"></i>
+            </button>
+        </div>
+    </ion-header-bar>
+    <ion-content style="overflow:scroll!important">
+        <preview ng-src="{{Preview.fileUrl}}" type="{{Preview.type}}" style="height:{{dimensions.height+'px'}}!important;width:{{dimensions.width+'px'}}!important;display:block"></preview>    
+     </ion-content>
+</ion-view>
+

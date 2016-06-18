@@ -17,7 +17,7 @@
     </ion-header-bar>
     <ion-content class="background2">
     <ion-list>
-    <ion-checkbox ng-show="!todo.completed" style="background:rgba(250,250,250,.3)" class="checkbox-balanced slideout " ng-repeat="todo in RecruitInfo.Task" ng-model="todo.completed">
+    <ion-checkbox ng-click="completeTask()" ng-show="!todo.completed" style="background:rgba(250,250,250,.3)" class="checkbox-balanced slideout " ng-repeat="todo in RecruitInfo.Task" ng-model="todo.completed">
     {{todo.title}}
     
     </ion-checkbox>

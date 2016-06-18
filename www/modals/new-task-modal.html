@@ -6,10 +6,10 @@
                 </button>
             </ion-header-bar>
             <ion-content>
-                <form ng-submit="createTask()">
+                <form ng-submit="addNote(newNote)">
                     <div class="list list-inset">
                         <label class="item item-input">
-                            <textarea ng-model="task.content" rows="10" placeholder="Task content"></textarea>
+                            <textarea ng-model="newNote" rows="10" placeholder="Task content"></textarea>
                         </label>
                       <button style="margin:0px;border:none;border-radius: 0" type="submit" class="button button-block button-positive">Add Note</button>
                     </div>

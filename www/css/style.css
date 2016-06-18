@@ -76,6 +76,13 @@
 	background-size: cover;
 	background-repeat: no-repeat;
 }
+.background4
+{
+	background:url('../img/overlays/overlay4.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
 .scroll-content {
       overflow: visible !important;
     }
@@ -87,4 +94,39 @@ item-trns {
 	
 	background-color: rgba(0, 0, 0, 0);
 
+}
+.thirds{
+  -webkit-box-flex: 0 !important;
+  -moz-box-flex: 0 !important;
+  -webkit-flex: 0 1 33% !important;
+  -ms-flex: 0 1 33% !important;
+  flex: 0 1 33% !important;
+}
+.homeMenuItem
+{
+	height:150px!important;
+	 background-color: rgba(69,115,147,.2)!important;
+	 box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+	text-align:center;
+    border-left: 3px solid #50D2C2;
+    font-size:70px;
+ 
+  }
+ .menuLabel
+ {
+	 font-size: 20px;
+	 font-family: Avenir-Book;
+	 font-weight:bolder;
+	 color:white;
+	 display: block;
+	 text-shadow:none;
+ }
+.profileText{
+font-family: Avenir-Book;
+font-size: 18px;
+color: #FFFFFF;
+letter-spacing: 0px;
+line-height: 28px;
 }

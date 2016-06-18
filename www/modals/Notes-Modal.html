@@ -16,12 +16,12 @@
         </div>
     </ion-header-bar>
     <ion-content class="background2">
-        <div ng-repeat="note in RecruitInfo.Notes" class="card">
+        <div ng-repeat="note in RecruitInfo.Notes|orderBy:'-datetime' track by $index" class="card">
             <div class="item item-text-wrap">
             {{note.text}}
             </div>
             <div class="item item-divider" style="font-size:10px">
-                <span style="font-size:10px!important">{{note.datetime| date : 'MMM d yyyy @ h:mm a'}}</span>
+                <span style="font-size:10px!important">{{note.datetime| cmdate : 'MMM d yyyy @ h:mm a'}}</span>
                 <span style="float:right">{{note.userName}}</span>
             </div>
         </div>
