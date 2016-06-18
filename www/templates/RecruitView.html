@@ -11,7 +11,7 @@
 	 </ion-list>
  </div>
     <ion-header-bar class="shadow_1" style="background:rgba(215,228,236,.95)!important;">
-     
+
         <div class="col"  style="text-align: left">
             <img ui-sref="Home" style="height:27px" src="img/icons/logosimp.png"/>
         </div>
@@ -25,20 +25,21 @@
 
            </ion-header-bar>
     <ion-content  class="background4">
-    <div class="card" style="height:100px;background: rgba(255,255,255,.5)">
+    <div class="card" style="height:200px;;width:100%;background: rgba(255,255,255,.6);margin-top:0px;margin-bottom:0px;margin-left:auto;margin-right:auto;text-align:center">
+      <img style="height:200px;width:200px;margin-left:auto;margin-right:auto" ng-src="https://jfsapp.com/Images/Recruits/{{currentRecruit.ProfilePic || 'blank.jpg'}}" />
     </div>
  <ion-list>
  <div class="item item-divider" style="text-align:center;background:rgba(215,228,236,.5)!important;color:white">
     Contact Info
   </div>
   <ion-item class="item-icon-left" style="background:rgba(215,228,236,.0)!important;color:white">
-  <i style="color:rgba(255,255,255,.5)" class="icon ion-android-person"></i>
-  <span style="font-size:10px;color:rgba(255,255,255,.5)">Name</span><br>
+  <i style="color:rgba(255,255,255,.6)" class="icon ion-android-person"></i>
+  <span style="font-size:10px;color:rgba(255,255,255,.6)">Name</span><br>
   <span class="profileText">{{currentRecruit.FNAME}}</span><span class="profileText"> {{currentRecruit.LNAME}}</span>
   </ion-item>
   <ion-item class="item-icon-left" style="background:rgba(215,228,236,.0)!important;color:white">
-  <i style="color:rgba(255,255,255,.5)" class="icon ion-android-mail"></i>
-  <span style="font-size:10px;color:rgba(255,255,255,.5)">Email</span><br>
+  <i style="color:rgba(255,255,255,.6)" class="icon ion-android-mail"></i>
+  <span style="font-size:10px;color:rgba(255,255,255,.6)">Email</span><br>
   <span class="profileText">{{currentRecruit.EMAIL}}</span>
   </ion-item>
   <ion-item class="item-icon-left" style="background:rgba(215,228,236,.0)!important;color:white">
@@ -51,11 +52,36 @@
   <span style="font-size:10px;color:rgba(255,255,255,.5)">Adress</span><br>
   <span class="profileText">{{currentRecruit.LINE_ONE_ADDR}} </span><span class="profileText">{{',' + currentRecruit.CITY}}</span>
   </ion-item>
+  <div class="item item-divider" style="text-align:center;background:rgba(215,228,236,.5)!important;color:white">
+     Color Test
+   </div>
+   <ion-item ng-show="isDefined(currentRecruit.Color_Blue)" class="item-icon-left" style="background:rgba(215,228,236,.0)!important;color:white;padding:0">
+
+   <div style="height:50px;width:{{(currentRecruit.Color_Blue/45)*100}}%;background-color:#97BBCD;display:inline-block;margin:0px">
+
+   </div>
+   <div style="height:50px;width:{{(currentRecruit.Color_White/45)*100}}%;background-color:#DCDCDC;display:inline-block;margin:0px">
+
+   </div>
+   <div style="height:50px;width:{{(currentRecruit.Color_Red/45)*100}}%;background-color:#F7464A;display:inline-block;margin:0px">
+
+   </div>
+   <div style="height:50px;width:{{(currentRecruit.Color_Yellow/45)*100}}%;background-color:#FDB45C;display:inline-block;margin:0px">
+
+   </div>
+
+ </ion-item>
+ <ion-item ng-click="sendColor()" ng-hide="isDefined(currentRecruit.Color_Blue)" class="item-icon-left" style="background:rgba(215,228,236,.0)!important;color:white">
+   <button class="button button-stable">
+    Send Color Test
+  </button>
+
+ </ion-item>
+   <div class="item item-divider" style="text-align:center;background:rgba(215,228,236,.5)!important;color:white">
+      Tasks
+    </div>
+
 	 </ion-list>
     </ion-content>
     <ion-footer-bar  style="background:rgba(215,228,236,.99)!important;box-shadow: 0px -1px 0px 0px rgba(0,0,0,0.30)!important;"></ion-footer-bar>
 </ion-view>
-
-
-
-

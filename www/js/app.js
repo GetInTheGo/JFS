@@ -151,6 +151,36 @@ app.config(function(localStorageServiceProvider, $stateProvider, $urlRouterProvi
 
     $urlRouterProvider.otherwise('/Login');
 });
+app.factory('uuid2', [
+	function() {
+		function s4() {
+			return Math.floor((1 + Math.random()) * 0x10000)
+				.toString(16)
+				.substring(1);
+		}
+
+		return {
+
+			newuuid: function() {
+				// http://www.ietf.org/rfc/rfc4122.txt
+				var s = [];
+				var hexDigits = "0123456789abcdef";
+				for (var i = 0; i < 36; i++) {
+					s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+				}
+				s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+				s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+				s[8] = s[13] = s[18] = s[23] = "-";
+				return s.join("");
+			},
+			newguid: function() {
+				return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+					s4() + '-' + s4() + s4() + s4();
+			}
+		};
+
+	}
+]);
 app.factory('JFSfunctions', function($http, $q,$rootScope) {
 	var myFunctions = {};
 	var observerCallbacks = [];
@@ -295,6 +325,28 @@ app.factory('currentUser', function($http, $q, $state, $ionicLoading, localStora
             return false;
         }
     };
+    currentUser.AssignColorQuizNotes = function(data) {
+    		var deferred = $q.defer();
+    		currentUser.getToken().then(function(Token) {
+    			$http({
+    				method: 'post',
+    				url: 'https://jfsapp.com/Secure/API/assignColorQuiz/',
+    				params: {
+    					'access_token': Token,
+    					client_id: 'testclient',
+    					client_secret: 'testpass'
+
+    				},
+    				data: data
+    			}).then(function(data) {
+    				console.log(data.data);
+    				deferred.resolve(data.data);
+    			}, function(error) {
+    				deferred.reject(error);
+    			});
+    		});
+    		return deferred.promise;
+    	};
 
     return currentUser;
 });
@@ -447,9 +499,13 @@ app.controller('main', function($cordovaInAppBrowser, Dropbox, $scope, $sce, $wi
         $scope.newTaskModal.hide();
     };
 });
-app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dropbox, $sce, $window, $filter, $ionicActionSheet, $scope, $ionicModal, localStorageService, $http, $ionicScrollDelegate, currentUser, $ionicLoading, $state, $stateParams,JFSfunctions) {
+app.controller('RecruitsCtrl', function($ionicPopup,uuid2,$ionicHistory, $cordovaInAppBrowser, Dropbox, $sce, $window, $filter, $ionicActionSheet, $scope, $ionicModal, localStorageService, $http, $ionicScrollDelegate, currentUser, $ionicLoading, $state, $stateParams,JFSfunctions) {
     $scope.usersLiscenced = [];
     $scope.currentRecruit = {};
+    $scope.isDefined = function(value){
+      if(value===null){return false;}
+      else{return true;}
+    };
     //console.log($stateParams);
     console.log('before');
     $scope.$on('$ionicView.enter', function(event, data) {
@@ -750,4 +806,37 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
         }
 
     };
+    $scope.sendColor = function() {
+		var testdata = {
+			Recruit_ID: $scope.currentRecruit.INDV_ID,
+			Test_Token: uuid2.newuuid(),
+			User_ID: 1,
+			Date_Assigned: new Date()
+		};
+		var formData = {
+			to: {Email:$scope.currentRecruit.EMAIL,fname:$scope.currentRecruit.FNAME},
+			from: $scope.currentUser,
+			subject: 'Color Test',
+			Test_Token: testdata.Test_Token
+		};
+		var postData = 'datas=' + JSON.stringify(formData);
+		currentUser.AssignColorQuizNotes(testdata).then(function(data) {
+			$http({
+				method: 'POST',
+				url: 'https://jfsapp.com/Admin/ManagmentPortal/AngularApp/Partials/Emails/php/SendColorTest.php',
+				data: postData,
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).then(function(data) {
+        var alertPopup = $ionicPopup.alert({
+     title: 'Color Test Sent',
+   });
+				//var message = $scope.CurrentRecruitLiscence.fname + ",\n This is Scott Johnson it was great talking with you today. I've emailed you the color test we talked about. If you don't see it please check your spam folder"
+				//$scope.sendText(message);
+			//	toastr.success('Color Test Sent');
+			});
+		});
+
+	};
 });
