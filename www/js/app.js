@@ -2,7 +2,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('ionic-todo', ['dropbox', 'ionic', 'LocalStorageModule', 'chart.js', 'ngCordova','angular.filter'])
+var app = angular.module('ionic-todo', ['dropbox', 'ionic', 'LocalStorageModule', 'chart.js', 'ngCordova','angular.filter']);
 
 app.run(function($ionicPlatform, $cordovaTouchID, $state) {
     $ionicPlatform.ready(function() {
@@ -24,7 +24,7 @@ app.run(function($ionicPlatform, $cordovaTouchID, $state) {
             // StatusBar.style(1); //Light
 
             //StatusBar.style(2); //Black, transulcent
-            //StatusBar.style(3); //Black, opaque       
+            //StatusBar.style(3); //Black, opaque
         }
 
 
@@ -56,7 +56,7 @@ app.directive('preview', function() {
 
 
 
-                })
+                });
         }
     };
 });
@@ -128,7 +128,8 @@ app.config(function(localStorageServiceProvider, $stateProvider, $urlRouterProvi
             url: "/Tools",
             templateUrl: "templates/Tools/index.html",
             controller: "Tools"
-        }).state('Tools.Dashboard', {
+        })
+        .state('Tools.Dashboard', {
             url: "/Tools.Dashboard",
             templateUrl: "templates/Tools/dashboard.html",
             controller: "Tools"
@@ -137,10 +138,14 @@ app.config(function(localStorageServiceProvider, $stateProvider, $urlRouterProvi
             url: "/Messages",
             templateUrl: "templates/Messages/index.html",
             controller: "Tools"
-        }).state('Messages.List', {
+        })
+        .state('Messages.List', {
             url: "/Messages.List",
             templateUrl: "templates/Messages/list.html",
-            controller: "Tools"
+        })
+        .state('Messages.Chat', {
+            url: "/Messages.Chat",
+            templateUrl: "templates/Messages/chat.html"
         });
 
 
@@ -155,7 +160,7 @@ app.factory('JFSfunctions', function($http, $q,$rootScope) {
 			callback(data);
 		});
 	};
-	var notification = window.Notification || window.mozNotification || window.webkitNotification
+	var notification = window.Notification || window.mozNotification || window.webkitNotification;
 	var conn = new WebSocket('wss://jfsapp.com/WebSocket');
 	conn.onopen = function(e) {
 		console.log("Connection established!");
@@ -175,11 +180,11 @@ app.factory('JFSfunctions', function($http, $q,$rootScope) {
 		}
 	};
 	return myFunctions;
-})
+});
 app.factory('currentUser', function($http, $q, $state, $ionicLoading, localStorageService) {
     var currentUser = {};
     var loggedin;
-    var User
+    var User;
     var UserInfo = {};
     if (localStorageService.get('UserData')) {
         UserInfo = localStorageService.get('UserData');
@@ -201,7 +206,7 @@ app.factory('currentUser', function($http, $q, $state, $ionicLoading, localStora
                 password: Password
             }
         }).success(function(data, status, headers, config) {
-            // Store your data or what ever.... 
+            // Store your data or what ever....
             // Then resolve
             UserInfo = data;
             UserInfo.date = new Date();
@@ -215,11 +220,11 @@ app.factory('currentUser', function($http, $q, $state, $ionicLoading, localStora
             deferred.reject("Error: request returned status " + status);
         });
         return deferred.promise;
-    }
+    };
     currentUser.getUser = function() {
         var deferred = $q.defer();
         if (angular.isDefined(User)) {
-            deferred.resolve(User)
+            deferred.resolve(User);
         } else {
             currentUser.getToken().then(function(token) {
                 $http({
@@ -232,12 +237,12 @@ app.factory('currentUser', function($http, $q, $state, $ionicLoading, localStora
                     url: 'https://jfsapp.com/Secure/API/User/',
                 }).then(function(data) {
                     User = data.data;
-                    deferred.resolve(data.data)
-                })
-            })
+                    deferred.resolve(data.data);
+                });
+            });
         }
         return deferred.promise;
-    }
+    };
     currentUser.refreshToken = function() {
         $ionicLoading.show({
             template: "Authenticating<ion-spinner icon='lines' class='spinner-energized'></ion-spinner></div>"
@@ -254,7 +259,7 @@ app.factory('currentUser', function($http, $q, $state, $ionicLoading, localStora
                 client_secret: 'testpass'
             }
         }).success(function(data, status, headers, config) {
-            // Store your data or what ever.... 
+            // Store your data or what ever....
             // Then resolve
             UserInfo = data;
             UserInfo.date = new Date();
@@ -268,7 +273,7 @@ app.factory('currentUser', function($http, $q, $state, $ionicLoading, localStora
             deferred.reject("Error: request returned status " + status);
         });
         return deferred.promise;
-    }
+    };
     currentUser.getToken = function() {
         var deferred = $q.defer();
         if (angular.isDate(UserInfo.date) & UserInfo.date >= moment().subtract(UserInfo.expires_in, 'seconds')) {
@@ -278,10 +283,10 @@ app.factory('currentUser', function($http, $q, $state, $ionicLoading, localStora
             console.log('refresh');
             currentUser.refreshToken().then(function(data) {
                 deferred.resolve(UserInfo.access_token);
-            })
+            });
         }
         return deferred.promise;
-    }
+    };
     currentUser.isLoggedIn = function() {
         if (angular.isDefined(UserInfo.refresh_token) & moment(UserInfo.date).isAfter(moment().subtract(14, 'days'))) {
             return true;
@@ -289,7 +294,7 @@ app.factory('currentUser', function($http, $q, $state, $ionicLoading, localStora
 
             return false;
         }
-    }
+    };
 
     return currentUser;
 });
@@ -302,7 +307,7 @@ app.controller('login', function($scope, currentUser, $ionicPlatform, $cordovaTo
             $cordovaTouchID.checkSupport().then(function() {
                 $cordovaTouchID.authenticate("").then(function() {
                     currentUser.refreshToken().then(function(data) {
-                        $state.go('Home')
+                        $state.go('Home');
                     }, function(data) {
                         alert('Please Login Again');
                     });
@@ -310,25 +315,25 @@ app.controller('login', function($scope, currentUser, $ionicPlatform, $cordovaTo
                     alert('Please Login Again');
                 });
             }, function(error) {
-                alert('title', 'error', 'why')
+                alert('title', 'error', 'why');
                     //alert(error);
             });
 
         }
     }, false);
 
-})
+});
 app.controller('main', function($cordovaInAppBrowser, Dropbox, $scope, $sce, $window, $ionicModal, localStorageService, $http, $ionicScrollDelegate, currentUser, $ionicLoading) {
     //store the entities name in a variable
-    currentUser.getUser().then(function(data) {})
+    currentUser.getUser().then(function(data) {});
     $scope.resizeScroll = function() {
-            $ionicScrollDelegate.resize()
-        }
+            $ionicScrollDelegate.resize();
+        };
         //$scope.currentUser = currentUser;
     $scope.dimensions = {
         width: $window.innerWidth,
         height: $window.innerHeight
-    }
+    };
     $scope.test = function(UserName, Password) {
             $http({
                 method: 'POST',
@@ -340,14 +345,14 @@ app.controller('main', function($cordovaInAppBrowser, Dropbox, $scope, $sce, $wi
                     password: Password
                 }
             }).success(function(data) {
-                // Store your data or what ever.... 
+                // Store your data or what ever....
                 // Then resolve
                 deferred.resolve(data);
             }).error(function(data, status, headers, config) {
                 deferred.reject("Error: request returned status " + status);
             });
 
-        }
+        };
         //currentUser.login('Cody','skiutah4969')
 
     $scope.updateRecruits = function() {
@@ -366,7 +371,7 @@ app.controller('main', function($cordovaInAppBrowser, Dropbox, $scope, $sce, $wi
         //console.log(number);
         number = number.replace(/[^0-9a-z]/gi, '');
         window.open('tel:' + number, '_system');
-    }
+    };
     $scope.sendEmail = function(email) {
         //if(window.plugins && window.plugins.email) {console.log('yes');}
         //console.log('here')
@@ -374,7 +379,7 @@ app.controller('main', function($cordovaInAppBrowser, Dropbox, $scope, $sce, $wi
         //number =number.replace(/[^0-9a-z]/gi, '');
         //console.log(number);
         window.open('mailto:' + email, '_system');
-    }
+    };
 
     $scope.updateRecruits();
     var taskData = 'task';
@@ -389,7 +394,7 @@ app.controller('main', function($cordovaInAppBrowser, Dropbox, $scope, $sce, $wi
     $scope.isItemShown = function(recruit) {
             $ionicScrollDelegate.resize();
             return recruit.shown;
-        }
+        };
         //initialize the tasks scope with empty array
     $scope.tasks = [];
 
@@ -452,8 +457,8 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
         console.log(data);
         $scope.stateParams = data.stateParams;
         if (angular.isDefined($scope.stateParams.currentRecruit)) {
-            $scope.currentRecruit = $scope.stateParams.currentRecruit
-            $scope.RecruitInfo = $scope.stateParams.RecruitInfo
+            $scope.currentRecruit = $scope.stateParams.currentRecruit;
+            $scope.RecruitInfo = $scope.stateParams.RecruitInfo;
             console.log('close');
             console.log($scope.stateParams);
         }
@@ -462,7 +467,7 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
     currentUser.getUser().then(function(data) {
         $scope.currentUser = data;
         //console.log(data)
-    })
+    });
     $scope.updateRecruits = function() {
         //if (localStorageService.get(taskData)) {
         //$scope.usersLiscenced =localStorageService.get(recruitList);
@@ -486,8 +491,8 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
                 //localStorageService.set(recruitList, data.data);
                 $scope.usersLiscenced = data.data;
                 $scope.$broadcast('scroll.refreshComplete');
-            })
-        })
+            });
+        });
     };
     $scope.updateRecruits();
     $ionicModal.fromTemplateUrl('modals/Notes-Modal.html', {
@@ -539,8 +544,8 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
                 $scope.newNoteModal.show();
                 $scope.currentRecruit = Recruit;
                 $ionicLoading.hide();
-            })
-        })
+            });
+        });
     };
     $scope.openRecruitView = function(Recruit) {
         $ionicLoading.show({
@@ -569,8 +574,8 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
                     currentRecruit: Recruit
                 });
 
-            })
-        })
+            });
+        });
     };
 
     $scope.openToDoModal = function(Recruit) {
@@ -593,8 +598,8 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
                 $scope.newToDoModal.show();
                 $scope.currentRecruit = Recruit;
                 $ionicLoading.hide();
-            })
-        })
+            });
+        });
     };
     $scope.moveItem = function(item, fromIndex, toIndex) {
         //Move the item in the array
@@ -631,12 +636,12 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
                     hideSheet();
                 }
                 if (index == 0) {
-                    $scope.openRecruitView(recruit)
+                    $scope.openRecruitView(recruit);
                     hideSheet();
                 }
             }
         });
-    }
+    };
     $scope.addNote = function(newNote) {
         //console.log('here')
 
@@ -648,32 +653,32 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
                 parentid: 0,
                 text: newNote,
                 datetime: Date()
-            }
+            };
             // console.log(Note)
         $scope.RecruitInfo.Notes.push(Note);
         $scope.updateRecruit(null, $scope.RecruitInfo);
         $scope.newTaskModal.hide();
 
-    }
+    };
     $scope.completeTask = function() {
         var NextStep = $filter('filter')($scope.RecruitInfo.Task, {
             completed: 'false'
         })[0];
-        var scheduled
+        var scheduled;
         if (angular.isUndefined(NextStep.scheduled)) {
-            scheduled = null
+            scheduled = null;
         } else {
-            scheduled = NextStep.scheduled
+            scheduled = NextStep.scheduled;
         }
         var Recruit = {
             NextStep: NextStep.title,
             NextStepScheduled: scheduled
-        }
+        };
 
         $scope.updateRecruit(Recruit, $scope.RecruitInfo);
 
 
-    }
+    };
     $scope.updateRecruit = function(recruit, info) {
         var formData = {
             Recruit: recruit,
@@ -695,10 +700,10 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
                 data: postData,
 
             }).then(function(data) {}, function(error) {
-                alert('Last Note Failed To Sync')
+                alert('Last Note Failed To Sync');
             });
-        })
-    }
+        });
+    };
     $scope.showDoc = function(document) {
         $ionicLoading.show({
             template: "<ion-spinner icon='lines' class='spinner-energized'></ion-spinner>"
@@ -731,7 +736,7 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
                 $scope.Preview.fileUrl = $sce.trustAsResourceUrl(temp);
                 window.open($scope.Preview.fileUrl, '_blank', 'EnableViewPortScale=yes,location=no,toolbar=yes');
                 $ionicLoading.hide();
-            })
+            });
         } else {
             Dropbox.thumbnailUrl(filePath, {
                 blob: true
@@ -743,6 +748,6 @@ app.controller('RecruitsCtrl', function($ionicHistory, $cordovaInAppBrowser, Dro
                 $ionicLoading.hide();
             });
         }
-		
-    }
+
+    };
 });

@@ -23,7 +23,7 @@
     </li>
     <div ng-repeat="text in Text_Summary|filter:search" style="background:rgba(255,255,255,.2)!important;">
      
-      <ion-item class="item background_2 item-avatar" style="vertical-align: middle;background:rgba(255,255,255,.2)!important;">
+      <ion-item ng-click="viewConversation(text)" class="item background_2 item-avatar" style="vertical-align: middle;background:rgba(255,255,255,.2)!important;">
 
          
         <img ng-src="https://jfsapp.com/Images/Recruits/{{text.ProfilePic || 'blank.jpg'}}">
@@ -34,7 +34,9 @@
         <ion-option-button class="button-assertive icon-top ion-trash-a" style="background-color:#FE3F35;font-size:30px;color:white"></ion-option-button>
 
       </ion-item>
-      <div style="height:100%;width:10px;background-color:red;display:inline-block;position:absolute"></div>
-          </div>
+      <div style="height:100%;width:10px;background-color:red;position:absolute;top:0;left:0"></div>
+      </div>
   </ion-list>
 </ion-content>
+<ion-footer-bar  style="background:rgba(215,228,236,.99)!important;box-shadow: 0px -1px 0px 0px rgba(0,0,0,0.30)!important;"></ion-footer-bar>
+

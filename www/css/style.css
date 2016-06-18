@@ -130,3 +130,28 @@ color: #FFFFFF;
 letter-spacing: 0px;
 line-height: 28px;
 }
+.chat .chat-bubble{
+		border-radius:5px;
+		background-color:#94C2ED;
+		padding:10px;
+		display:block;
+		color:white;
+		font-family: Roboto;
+		width:65%;
+		margin:10px;
+		 box-shadow: 0 0 6px #B2B2B2;
+
+    padding: 10px 18px;
+    position: relative;
+    vertical-align: top;
+	}
+	.chat .chat-bubble.left{
+		margin-right:auto;
+		background-color:#86BB71;
+	}
+	.chat .chat-bubble.right{
+		margin-left:auto;
+	}
+	.footer-item-input-insert {
+    position: inherit;
+}
